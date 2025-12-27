@@ -7,27 +7,15 @@ import { motion, AnimatePresence } from "framer-motion"
 import { TextAnimate } from "./ui/text-animate"
 
 const lyrics = [
-    // Intro music delay: 4.8 seconds tak wait karega
-    { text: "Jis pe rakhe tum ne qadam", duration: 4800, anim: 1.5 }, 
-    { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
-    { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
-    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
-    
-    // Repetition
-    { text: "Jis pe rakhe tum ne qadam", duration: 3800, anim: 1.5 },
-    { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
-    { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
-    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
-
-    // Adhoore Section (Timing Fixed)
-    { text: "Adhoore adhoore", duration: 3200, anim: 1.2 }, 
-    { text: "Thhe vo din humare", duration: 3500, anim: 1.5 },
-    { text: "Tumhare bina jo", duration: 3200, anim: 1.2 }, 
-    { text: "Guzaare thhe saare..", duration: 3800, anim: 1.5 },
-
-    // Sitaare Sitaare
-    { text: "Sitaare Sitaare", duration: 4000, anim: 2.0 },
-    { text: "Mile hain Sitaare", duration: 4500, anim: 2.2 },
+    { text: "Jiss pe rakhe tumne kadam,", duration: 3190, anim: 1.5 },
+    { text: "ab se mera bhi raasta hai", duration: 6380, anim: 1.5 },
+    { text: "Jaise mera tum se koi pichhle janam ka vaasta hai", duration: 5850, anim: 2.2 },
+    { text: "Adhoore-adhoore the woh din humare", duration: 7180, anim: 2.0 },
+    { text: "Tumhare bina jo guzaare the saare", duration: 6620, anim: 2.0 },
+    { text: "O, sitaare, sitaare, mile hain sitaare", duration: 6670, anim: 2.0 },
+    { text: "Tabhi toh huye hain nazaare tumhare", duration: 3820, anim: 1.8 },
+    { text: "Bas tum se milne ki der thi", duration: 3000, anim: 1.5 },
+    { text: "Abonne-toi", duration: 3000, anim: 1.2 },
 ]
 
 export default function LyricsScreen({ onComplete }) {
@@ -52,10 +40,7 @@ export default function LyricsScreen({ onComplete }) {
     }, [isAnimating, currentLyricIndex, onComplete])
 
     return (
-        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[300px]">
-            {/* Audio tag for sound */}
-            <audio src="/sitaare-lofi.mp3" autoPlay />
-
+        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative">
             <AnimatePresence mode="wait">
                 {isAnimating && currentLyricIndex < lyrics.length && (
                     <motion.div
@@ -66,18 +51,38 @@ export default function LyricsScreen({ onComplete }) {
                         transition={{ duration: 0.6, ease: "easeInOut" }}
                         className="text-center"
                     >
-                        <TextAnimate
-                            by="word"
-                            duration={lyrics[currentLyricIndex].anim}
-                            animation="blurInUp"
-                            className={`text-3xl md:text-5xl lg:text-6xl font-bold leading-normal
-                                ${lyrics[currentLyricIndex].text.includes("Sitaare") 
-                                    ? "text-yellow-200 drop-shadow-[0_0_15px_rgba(253,224,71,0.5)]" 
-                                    : "text-foreground"
-                                }`}
-                        >
-                            {lyrics[currentLyricIndex].text}
-                        </TextAnimate>
+                        {currentLyricIndex === 0 ? (
+                            <div className="flex flex-wrap justify-center items-center gap-x-3">
+                                <TextAnimate
+                                    by="word"
+                                    duration={1.2}
+                                    animation="blurInUp"
+                                    className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)]"
+                                >
+                                    Jiss
+                                </TextAnimate>
+
+                                <TextAnimate
+                                    by="word"
+                                    duration={1.2}
+                                    delay={0.6}
+                                    animation="blurInUp"
+                                    className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] text-balance leading-normal"
+                                >
+                                    pe rakhe tumne kadam
+                                </TextAnimate>
+                            </div>
+                        ) : (
+                            <TextAnimate
+                                key={currentLyricIndex}
+                                by="word"
+                                duration={lyrics[currentLyricIndex].anim}
+                                animation="blurInUp"
+                                className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] text-balance leading-normal"
+                            >
+                                {lyrics[currentLyricIndex].text}
+                            </TextAnimate>
+                        )}
                     </motion.div>
                 )}
             </AnimatePresence>
