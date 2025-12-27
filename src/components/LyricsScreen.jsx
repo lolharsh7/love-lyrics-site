@@ -3,19 +3,19 @@
 export const dynamic = "force-static"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence } from "with-framer-motion" // Check your import path
 import { TextAnimate } from "./ui/text-animate"
 
+[span_0](start_span)// Durations calculated from your provided timestamps[span_0](end_span)
 const lyrics = [
-    { text: "Jiss pe rakhe tumne kadam,", duration: 3190, anim: 1.5 },
-    { text: "ab se mera bhi raasta hai", duration: 6380, anim: 1.5 },
-    { text: "Jaise mera tum se koi pichhle janam ka vaasta hai", duration: 5850, anim: 2.2 },
-    { text: "Adhoore-adhoore the woh din humare", duration: 7180, anim: 2.0 },
-    { text: "Tumhare bina jo guzaare the saare", duration: 6620, anim: 2.0 },
-    { text: "O, sitaare, sitaare, mile hain sitaare", duration: 6670, anim: 2.0 },
-    { text: "Tabhi toh huye hain nazaare tumhare", duration: 3820, anim: 1.8 },
-    { text: "Bas tum se milne ki der thi", duration: 3000, anim: 1.5 },
-    { text: "Abonne-toi", duration: 3000, anim: 1.2 },
+    { text: "Jiss pe rakhe tumne kadam,", duration: 3500, anim: 1.5 },
+    { text: "ab se mera bhi raasta hai", duration: 6530, anim: 1.5 },
+    { text: "Jaise mera tum se koi pichhle janam ka vaasta hai", duration: 6230, anim: 2.2 },
+    { text: "Adhoore-adhoore the woh din humare", duration: 6400, anim: 2.0 },
+    { text: "Tumhare bina jo guzaare the saare", duration: 6960, anim: 2.0 },
+    { text: "O, sitaare, sitaare, mile hain sitaare", duration: 5880, anim: 2.0 },
+    { text: "Tabhi toh huye hain nazaare tumhare", duration: 3630, anim: 1.8 },
+    { text: "Bas tum se milne ki der thi", duration: 4000, anim: 1.5 },
 ]
 
 export default function LyricsScreen({ onComplete }) {
@@ -65,16 +65,15 @@ export default function LyricsScreen({ onComplete }) {
                                 <TextAnimate
                                     by="word"
                                     duration={1.2}
-                                    delay={0.6}
+                                    delay={0.8}
                                     animation="blurInUp"
                                     className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] text-balance leading-normal"
                                 >
-                                    pe rakhe tumne kadam
+                                    pe rakhe tumne kadam,
                                 </TextAnimate>
                             </div>
                         ) : (
                             <TextAnimate
-                                key={currentLyricIndex}
                                 by="word"
                                 duration={lyrics[currentLyricIndex].anim}
                                 animation="blurInUp"
