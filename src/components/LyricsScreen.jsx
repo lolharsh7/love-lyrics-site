@@ -14,7 +14,7 @@ const lyrics = [
     { text: "Pichhle janam ka vaasta hai", duration: 2550, anim: 1.5 },
     
     // Adhoore Section
-    { text: "Adhoore adhoore", duration: 3110, anim: 1.2 }, 
+    { text: "Adhoore adhoore", duration: 3100, anim: 1.2 }, 
     { text: "Thhe vo din humare", duration: 3610, anim: 1.5 },
     { text: "Tumhare bina jo", duration: 2950, anim: 1.2 }, 
     { text: "Guzaare thhe saare..", duration: 4000, anim: 1.5 },
