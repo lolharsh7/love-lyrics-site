@@ -6,33 +6,27 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TextAnimate } from "./ui/text-animate"
 
+// Audio timing ke mutabiq updated lyrics
+// duration ms mein hai aur anim seconds mein
 const lyrics = [
-    { text: "Jiss pe rakhe tumne kadam,", duration: 3500, anim: 0.8 }, 
-    { text: "ab se mera bhi raasta hai", duration: 6500, anim: 0.8 }, 
-    { text: "Jaise mera tum se koi pichhle janam ka vaasta hai", duration: 6200, anim: 1.0 },
-    { text: "Adhoore-adhoore the woh din humare", duration: 6400, anim: 1.0 },
-    { text: "Tumhare bina jo guzaare the saare", duration: 6900, anim: 1.0 },
-    { text: "O, sitaare, sitaare, mile hain sitaare", duration: 5800, anim: 1.0 },
-    { text: "Tabhi toh huye hain nazaare tumhare", duration: 3600, anim: 0.8 },
-    { text: "Bas tum se milne ki der thi", duration: 4000, anim: 0.8 },
+    { text: "Jiss pe rakhe tumne kadam", duration: 3500, anim: 2.0 },
+    { text: "Ab se mera bhi raasta hai", duration: 4000, anim: 1.8 },
+    { text: "Jaise mera tum se koi", duration: 7500, anim: 2.2 },
+    { text: "Pichhle janam ka vaasta hai", duration: 5500, anim: 1.8 },
+    { text: "Adhoore adhoore, thhe woh din hamare", duration: 7200, anim: 2.4 },
+    { text: "Tumhare bina jo, guzaare thhe saare", duration: 7800, anim: 2.4 },
+    { text: "Sitaare sitaare, mile hain sitaare", duration: 5200, anim: 1.8 },
+    { text: "Tabhi toh huye hain, nazaare tumhare", duration: 7500, anim: 2.2 },
+    { text: "Bas... tum se milne ki der thi", duration: 5000, anim: 1.5 },
 ]
 
 export default function LyricsScreen({ onComplete }) {
-    const [currentLyricIndex, setCurrentLyricIndex] = useState(-1)
+    const [currentLyricIndex, setCurrentLyricIndex] = useState(0)
     const [isAnimating, setIsAnimating] = useState(true)
 
     useEffect(() => {
         if (!isAnimating) return
 
-        // 1. Shuruati music ke liye wait (3.3s par trigger taaki 3.66s par word dikh jaye)
-        if (currentLyricIndex === -1) {
-            const initialTimer = setTimeout(() => {
-                setCurrentLyricIndex(0)
-            [span_2](start_span)}, 3300)[span_2](end_span)
-            return () => clearTimeout(initialTimer)
-        }
-
-        // 2. Agli line kab aayegi (Timestamps based on your file)
         const currentDuration = lyrics[currentLyricIndex].duration
 
         const timer = setTimeout(() => {
@@ -42,41 +36,43 @@ export default function LyricsScreen({ onComplete }) {
                 setIsAnimating(false)
                 if (onComplete) onComplete()
             }
-        [span_3](start_span)}, currentDuration)[span_3](end_span)
+        }, currentDuration)
 
         return () => clearTimeout(timer)
     }, [isAnimating, currentLyricIndex, onComplete])
 
     return (
-        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[300px]">
+        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[200px]">
             <AnimatePresence mode="wait">
-                {isAnimating && currentLyricIndex >= 0 && (
+                {isAnimating && currentLyricIndex < lyrics.length && (
                     <motion.div
                         key={currentLyricIndex}
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
-                        transition={{ duration: 0.3 }} // Exit delay ko minimize kiya hai
+                        initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
                         className="text-center"
                     >
+                        {/* Pehli line ke liye special split logic */}
                         {currentLyricIndex === 0 ? (
                             <div className="flex flex-wrap justify-center items-center gap-x-3">
                                 <TextAnimate
                                     by="word"
-                                    duration={0.6}
+                                    duration={1.2}
                                     animation="blurInUp"
-                                    className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] font-bold"
+                                    className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)]"
                                 >
-                                    Jiss
+                                    Jiss pe rakhe
                                 </TextAnimate>
+
                                 <TextAnimate
                                     by="word"
-                                    duration={0.6}
-                                    delay={0.3}
+                                    duration={1.2}
+                                    delay={1.2}
                                     animation="blurInUp"
-                                    className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] font-bold"
+                                    className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] text-balance leading-normal"
                                 >
-                                    pe rakhe tumne kadam,
+                                    tumne kadam
                                 </TextAnimate>
                             </div>
                         ) : (
@@ -84,7 +80,7 @@ export default function LyricsScreen({ onComplete }) {
                                 by="word"
                                 duration={lyrics[currentLyricIndex].anim}
                                 animation="blurInUp"
-                                className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] font-bold"
+                                className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] text-balance leading-normal"
                             >
                                 {lyrics[currentLyricIndex].text}
                             </TextAnimate>
