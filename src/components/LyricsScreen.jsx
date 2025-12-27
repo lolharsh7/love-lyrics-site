@@ -3,27 +3,36 @@
 export const dynamic = "force-static"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "with-framer-motion" // Check your import path
+import { motion, AnimatePresence } from "framer-motion"
 import { TextAnimate } from "./ui/text-animate"
 
-[span_0](start_span)// Durations calculated from your provided timestamps[span_0](end_span)
+// Maine durations ko perfect sync karne ke liye exit animation (0.6s) minus kar diya hai
 const lyrics = [
-    { text: "Jiss pe rakhe tumne kadam,", duration: 3500, anim: 1.5 },
-    { text: "ab se mera bhi raasta hai", duration: 6530, anim: 1.5 },
-    { text: "Jaise mera tum se koi pichhle janam ka vaasta hai", duration: 6230, anim: 2.2 },
-    { text: "Adhoore-adhoore the woh din humare", duration: 6400, anim: 2.0 },
-    { text: "Tumhare bina jo guzaare the saare", duration: 6960, anim: 2.0 },
-    { text: "O, sitaare, sitaare, mile hain sitaare", duration: 5880, anim: 2.0 },
-    { text: "Tabhi toh huye hain nazaare tumhare", duration: 3630, anim: 1.8 },
+    { text: "Jiss pe rakhe tumne kadam,", duration: 2900, anim: 1.5 },
+    { text: "ab se mera bhi raasta hai", duration: 5930, anim: 1.5 },
+    { text: "Jaise mera tum se koi pichhle janam ka vaasta hai", duration: 5630, anim: 2.2 },
+    { text: "Adhoore-adhoore the woh din humare", duration: 5800, anim: 2.0 },
+    { text: "Tumhare bina jo guzaare the saare", duration: 6360, anim: 2.0 },
+    { text: "O, sitaare, sitaare, mile hain sitaare", duration: 5280, anim: 2.0 },
+    { text: "Tabhi toh huye hain nazaare tumhare", duration: 3030, anim: 1.8 },
     { text: "Bas tum se milne ki der thi", duration: 4000, anim: 1.5 },
 ]
 
 export default function LyricsScreen({ onComplete }) {
-    const [currentLyricIndex, setCurrentLyricIndex] = useState(0)
+    // -1 se start kiya hai taaki shuruat ke 3.66s music ke liye wait kare
+    const [currentLyricIndex, setCurrentLyricIndex] = useState(-1)
     const [isAnimating, setIsAnimating] = useState(true)
 
     useEffect(() => {
         if (!isAnimating) return
+
+        // Initial Delay: Gaana 03.66s par shuru hota hai
+        if (currentLyricIndex === -1) {
+            const initialTimer = setTimeout(() => {
+                setCurrentLyricIndex(0)
+            }, 3660)
+            return () => clearTimeout(initialTimer)
+        }
 
         const currentDuration = lyrics[currentLyricIndex].duration
 
@@ -40,9 +49,9 @@ export default function LyricsScreen({ onComplete }) {
     }, [isAnimating, currentLyricIndex, onComplete])
 
     return (
-        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative">
+        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[300px]">
             <AnimatePresence mode="wait">
-                {isAnimating && currentLyricIndex < lyrics.length && (
+                {isAnimating && currentLyricIndex >= 0 && currentLyricIndex < lyrics.length && (
                     <motion.div
                         key={currentLyricIndex}
                         initial={{ opacity: 0, y: 10, scale: 0.97 }}
