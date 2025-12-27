@@ -1,90 +1,86 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+export const dynamic = "force-static"
+
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TextAnimate } from "./ui/text-animate"
 
-// EXACT timestamps for the audio file you uploaded
 const lyrics = [
-    { text: "Jis pe rakhe tum ne qadam", startTime: 4.8, anim: 1.5 },
-    { text: "Ab se mera bhi raasta hai", startTime: 8.0, anim: 1.5 },
-    { text: "Jaise mera tum se koi", startTime: 11.5, anim: 1.5 },
-    { text: "Pichhle janam ka vaasta hai", startTime: 15.0, anim: 2.0 },
+    // Intro music delay: 4.8 seconds tak wait karega
+    { text: "Jis pe rakhe tum ne qadam", duration: 4800, anim: 1.5 }, 
+    { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
+    { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
+    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
+    
+    // Repetition
+    { text: "Jis pe rakhe tum ne qadam", duration: 3800, anim: 1.5 },
+    { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
+    { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
+    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
 
-    // Fixed Bridge Section - timed to the lofi beats
-    { text: "Adhoore adhoore", startTime: 19.5, anim: 1.2 }, 
-    { text: "Thhe vo din humare", startTime: 22.3, anim: 1.5 },
-    { text: "Tumhare bina jo", startTime: 25.5, anim: 1.2 }, 
-    { text: "Guzaare thhe saare..", startTime: 28.7, anim: 1.5 },
+    // Adhoore Section (Timing Fixed)
+    { text: "Adhoore adhoore", duration: 3200, anim: 1.2 }, 
+    { text: "Thhe vo din humare", duration: 3500, anim: 1.5 },
+    { text: "Tumhare bina jo", duration: 3200, anim: 1.2 }, 
+    { text: "Guzaare thhe saare..", duration: 3800, anim: 1.5 },
 
-    // The Hook
-    { text: "Sitaare Sitaare", startTime: 32.5, anim: 2.0 },
-    { text: "Mile hain Sitaare", startTime: 35.8, anim: 2.0 },
+    // Sitaare Sitaare
+    { text: "Sitaare Sitaare", duration: 4000, anim: 2.0 },
+    { text: "Mile hain Sitaare", duration: 4500, anim: 2.2 },
 ]
 
 export default function LyricsScreen({ onComplete }) {
-    const [currentLyricIndex, setCurrentLyricIndex] = useState(-1)
-    const audioRef = useRef(null)
+    const [currentLyricIndex, setCurrentLyricIndex] = useState(0)
+    const [isAnimating, setIsAnimating] = useState(true)
 
     useEffect(() => {
-        const audio = audioRef.current
-        if (!audio) return
+        if (!isAnimating) return
 
-        const handleSync = () => {
-            const time = audio.currentTime
-            // This logic finds the correct lyric based on the song's current second
-            const index = lyrics.findLastIndex(line => time >= line.startTime)
-            
-            if (index !== currentLyricIndex) {
-                setCurrentLyricIndex(index)
+        const currentDuration = lyrics[currentLyricIndex].duration
+
+        const timer = setTimeout(() => {
+            if (currentLyricIndex < lyrics.length - 1) {
+                setCurrentLyricIndex(prev => prev + 1)
+            } else {
+                setIsAnimating(false)
+                if (onComplete) onComplete()
             }
+        }, currentDuration)
 
-            if (audio.ended && onComplete) {
-                onComplete()
-            }
-        }
-
-        audio.addEventListener("timeupdate", handleSync)
-        return () => audio.removeEventListener("timeupdate", handleSync)
-    }, [currentLyricIndex, onComplete])
+        return () => clearTimeout(timer)
+    }, [isAnimating, currentLyricIndex, onComplete])
 
     return (
-        <div className="w-full min-h-[400px] flex flex-col items-center justify-center relative">
-            {/* Audio AutoPlay - Ensure the filename matches exactly in your public folder */}
-            <audio 
-                ref={audioRef} 
-                src="/sitaare-lofi.mp3" 
-                autoPlay 
-                playsInline
-            />
+        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[300px]">
+            {/* Audio tag for sound */}
+            <audio src="/sitaare-lofi.mp3" autoPlay />
 
-            <div className="w-full max-w-2xl lg:max-w-3xl flex items-center justify-center">
-                <AnimatePresence mode="wait">
-                    {currentLyricIndex !== -1 && (
-                        <motion.div
-                            key={currentLyricIndex}
-                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -10, scale: 1.05 }}
-                            transition={{ duration: 0.4, ease: "easeOut" }}
-                            className="text-center"
+            <AnimatePresence mode="wait">
+                {isAnimating && currentLyricIndex < lyrics.length && (
+                    <motion.div
+                        key={currentLyricIndex}
+                        initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                        className="text-center"
+                    >
+                        <TextAnimate
+                            by="word"
+                            duration={lyrics[currentLyricIndex].anim}
+                            animation="blurInUp"
+                            className={`text-3xl md:text-5xl lg:text-6xl font-bold leading-normal
+                                ${lyrics[currentLyricIndex].text.includes("Sitaare") 
+                                    ? "text-yellow-200 drop-shadow-[0_0_15px_rgba(253,224,71,0.5)]" 
+                                    : "text-foreground"
+                                }`}
                         >
-                            <TextAnimate
-                                by="word"
-                                duration={lyrics[currentLyricIndex].anim}
-                                animation="blurInUp"
-                                className={`text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-balance leading-tight
-                                    ${lyrics[currentLyricIndex].text.includes("Sitaare") 
-                                        ? "text-yellow-200 drop-shadow-[0_0_20px_rgba(253,224,71,0.6)]" 
-                                        : "text-foreground drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]"
-                                    }`}
-                            >
-                                {lyrics[currentLyricIndex].text}
-                            </TextAnimate>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+                            {lyrics[currentLyricIndex].text}
+                        </TextAnimate>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     )
 }
