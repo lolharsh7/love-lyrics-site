@@ -10,12 +10,12 @@ const lyrics = [
     [span_0](start_span)// Timing matching your LRC data[span_0](end_span)
     { text: "Jis pe rakhe tum ne qadam", duration: 6350, anim: 2.0 }, 
     { text: "Ab se mera bhi raasta hai", duration: 2860, anim: 1.2 }, 
-    { text: "Jaise mera tum se koi", duration: 3540, anim: 1.5 },
-    { text: "Pichhle janam ka vaasta hai", duration: 2560, anim: 1.5 },
+    { text: "Jaise mera tum se koi", duration: 3535, anim: 1.5 },
+    { text: "Pichhle janam ka vaasta hai", duration: 2550, anim: 1.5 },
     
     // Adhoore Section
-    { text: "Adhoore adhoore", duration: 3120, anim: 1.2 }, 
-    { text: "Thhe vo din humare", duration: 3620, anim: 1.5 },
+    { text: "Adhoore adhoore", duration: 3110, anim: 1.2 }, 
+    { text: "Thhe vo din humare", duration: 3610, anim: 1.5 },
     { text: "Tumhare bina jo", duration: 2950, anim: 1.2 }, 
     { text: "Guzaare thhe saare..", duration: 4000, anim: 1.5 },
 
