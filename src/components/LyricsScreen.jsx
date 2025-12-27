@@ -7,24 +7,27 @@ import { motion, AnimatePresence } from "framer-motion"
 import { TextAnimate } from "./ui/text-animate"
 
 const lyrics = [
-    // 00:00.00 -> 00:06.35
-    { text: "Jis pe rakhe tum ne qadam", duration: 6350, anim: 2.0 }, 
-    // 00:06.35 -> 00:09.21
-    { text: "Ab se mera bhi raasta hai", duration: 2860, anim: 1.2 }, 
-    // 00:09.21 -> 00:12.75
-    { text: "Jaise mera tum se koi", duration: 3540, anim: 1.5 },
-    // 00:12.75 -> 00:15.31 (Pacing fixed)
-    { text: "Pichhle janam ka vaasta hai", duration: 2560, anim: 1.5 },
+    // Intro music delay: 4.8 seconds tak wait karega
+    { text: "Jis pe rakhe tum ne qadam", duration: 4800, anim: 1.5 }, 
+    { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
+    { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
+    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
     
-    // Adhoore Section (Timing matching your LRC file)
-    { text: "Adhoore adhoore", duration: 3120, anim: 1.2 }, 
-    { text: "Thhe vo din humare", duration: 3620, anim: 1.5 },
-    { text: "Tumhare bina jo", duration: 2950, anim: 1.2 }, 
-    // Music yahan lamba pause leta hai (~6.5 seconds)
-    { text: "Guzaare thhe saare..", duration: 6500, anim: 1.5 },
+    // Repetition
+    { text: "Jis pe rakhe tum ne qadam", duration: 3800, anim: 1.0 },
+    { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
+    { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
+    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
 
-    // Hook (Starts exactly after the music pause)
-    { text: "Sitaare Sitaare", duration: 5000, anim: 2.5 },
+    // Adhoore Section (Timing Fixed)
+    { text: "Adhoore adhoore", duration: 3200, anim: 1.2 }, 
+    { text: "Thhe vo din humare", duration: 3500, anim: 1.5 },
+    { text: "Tumhare bina jo", duration: 3200, anim: 1.2 }, 
+    { text: "Guzaare thhe saare..", duration: 3800, anim: 1.5 },
+
+    // Sitaare Sitaare
+    { text: "Sitaare Sitaare", duration: 4000, anim: 2.0 },
+    { text: "Mile hain Sitaare", duration: 4500, anim: 2.2 },
 ]
 
 export default function LyricsScreen({ onComplete }) {
@@ -32,7 +35,7 @@ export default function LyricsScreen({ onComplete }) {
     const [isAnimating, setIsAnimating] = useState(true)
 
     useEffect(() => {
-        if (!isAnimating || currentLyricIndex >= lyrics.length) return
+        if (!isAnimating) return
 
         const currentDuration = lyrics[currentLyricIndex].duration
 
@@ -49,27 +52,28 @@ export default function LyricsScreen({ onComplete }) {
     }, [isAnimating, currentLyricIndex, onComplete])
 
     return (
-        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[400px]">
-            <audio src="/sitaare-lofi.mp3" autoPlay playsInline />
+        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[300px]">
+            {/* Audio tag for sound */}
+            <audio src="/sitaare-lofi.mp3" autoPlay />
 
             <AnimatePresence mode="wait">
                 {isAnimating && currentLyricIndex < lyrics.length && (
                     <motion.div
                         key={currentLyricIndex}
-                        initial={{ opacity: 0, y: 12, scale: 0.98 }}
+                        initial={{ opacity: 0, y: 10, scale: 0.97 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -12, scale: 1.02 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="text-center px-4"
+                        exit={{ opacity: 0, y: -10, scale: 0.97 }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                        className="text-center"
                     >
                         <TextAnimate
                             by="word"
                             duration={lyrics[currentLyricIndex].anim}
                             animation="blurInUp"
-                            className={`text-3xl md:text-5xl lg:text-6xl font-bold leading-tight
+                            className={`text-3xl md:text-5xl lg:text-6xl font-bold leading-normal
                                 ${lyrics[currentLyricIndex].text.includes("Sitaare") 
-                                    ? "text-yellow-200 drop-shadow-[0_0_25px_rgba(253,224,71,0.7)]" 
-                                    : "text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]"
+                                    ? "text-yellow-200 drop-shadow-[0_0_15px_rgba(253,224,71,0.5)]" 
+                                    : "text-foreground"
                                 }`}
                         >
                             {lyrics[currentLyricIndex].text}
