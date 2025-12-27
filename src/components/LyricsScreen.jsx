@@ -12,17 +12,18 @@ const lyrics = [
     // 00:06.35 -> 00:09.21
     { text: "Ab se mera bhi raasta hai", duration: 2860, anim: 1.2 }, 
     // 00:09.21 -> 00:12.75
-    { text: "Jaise mera tum se koi", duration: 3540, anim: 1.2 },
-    // 00:12.75 -> 00:15.31 (Yahan duration perfect 2.5s hai)
+    { text: "Jaise mera tum se koi", duration: 3540, anim: 1.5 },
+    // 00:12.75 -> 00:15.31 (Pacing fixed)
     { text: "Pichhle janam ka vaasta hai", duration: 2560, anim: 1.5 },
     
-    // Adhoore Section (Starts exactly at 15.31s)
-    { text: "Adhoore adhoore", duration: 3120, anim: 1.0 },         // to 18.43
-    { text: "Thhe vo din humare", duration: 3620, anim: 1.2 },      // to 22.05
-    { text: "Tumhare bina jo", duration: 2950, anim: 1.0 },         // to 25.00
-    { text: "Guzaare thhe saare..", duration: 6500, anim: 1.5 },    // Long breath before Sitaare
-    
-    // Hook (Starts exactly at 31.5s approx)
+    // Adhoore Section (Timing matching your LRC file)
+    { text: "Adhoore adhoore", duration: 3120, anim: 1.2 }, 
+    { text: "Thhe vo din humare", duration: 3620, anim: 1.5 },
+    { text: "Tumhare bina jo", duration: 2950, anim: 1.2 }, 
+    // Music yahan lamba pause leta hai (~6.5 seconds)
+    { text: "Guzaare thhe saare..", duration: 6500, anim: 1.5 },
+
+    // Hook (Starts exactly after the music pause)
     { text: "Sitaare Sitaare", duration: 5000, anim: 2.5 },
 ]
 
@@ -49,7 +50,6 @@ export default function LyricsScreen({ onComplete }) {
 
     return (
         <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[400px]">
-            {/* Audio: ensure it plays on load */}
             <audio src="/sitaare-lofi.mp3" autoPlay playsInline />
 
             <AnimatePresence mode="wait">
