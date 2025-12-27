@@ -6,19 +6,15 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { TextAnimate } from "./ui/text-animate"
 
-// Audio timing ke mutabiq updated lyrics
-// duration ms mein hai aur anim seconds mein
 const lyrics = [
-    { text: "Jiss pe rakhe tumne kadam", duration: 3500, anim: 2.0 },
-    { text: "Ab se mera bhi raasta hai", duration: 4000, anim: 1.8 },
-    { text: "Jaise mera tum se koi", duration: 7500, anim: 2.2 },
-    { text: "Pichhle janam ka vaasta hai", duration: 5500, anim: 1.8 },
-    { text: "Adhoore adhoore, thhe woh din hamare", duration: 7200, anim: 2.4 },
-    { text: "Tumhare bina jo, guzaare thhe saare", duration: 7800, anim: 2.4 },
-    { text: "Sitaare sitaare, mile hain sitaare", duration: 5200, anim: 1.8 },
-    { text: "Tabhi toh huye hain, nazaare tumhare", duration: 7500, anim: 2.2 },
-    { text: "Bas... tum se milne ki der thi", duration: 5000, anim: 1.5 },
+    { text: "When all I dream of is your eyes", duration: 4800, anim: 2.5 },
+    { text: "All I long for is your touch", duration: 3800, anim: 1.5 },
+    { text: "And, darlin', something tells me that's enough", duration: 6300, anim: 2.2 },
+    { text: "You can say that I'm a fool", duration: 3600, anim: 1.8 },
+    { text: "And I don't know very much", duration: 3400, anim: 1.8 },
+    { text: "But I think they call this love", duration: 6000, anim: 2.2 },
 ]
+
 
 export default function LyricsScreen({ onComplete }) {
     const [currentLyricIndex, setCurrentLyricIndex] = useState(0)
@@ -34,15 +30,17 @@ export default function LyricsScreen({ onComplete }) {
                 setCurrentLyricIndex(prev => prev + 1)
             } else {
                 setIsAnimating(false)
-                if (onComplete) onComplete()
+                onComplete()
+
             }
         }, currentDuration)
 
         return () => clearTimeout(timer)
     }, [isAnimating, currentLyricIndex, onComplete])
 
+
     return (
-        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative min-h-[200px]">
+        <div className="w-full max-w-2xl lg:max-w-3xl flex flex-col items-center justify-center relative">
             <AnimatePresence mode="wait">
                 {isAnimating && currentLyricIndex < lyrics.length && (
                     <motion.div
@@ -53,26 +51,25 @@ export default function LyricsScreen({ onComplete }) {
                         transition={{ duration: 0.6, ease: "easeInOut" }}
                         className="text-center"
                     >
-                        {/* Pehli line ke liye special split logic */}
                         {currentLyricIndex === 0 ? (
                             <div className="flex flex-wrap justify-center items-center gap-x-3">
                                 <TextAnimate
                                     by="word"
-                                    duration={1.2}
+                                    duration={2.4}
                                     animation="blurInUp"
                                     className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)]"
                                 >
-                                    Jiss pe rakhe
+                                    When
                                 </TextAnimate>
 
                                 <TextAnimate
                                     by="word"
-                                    duration={1.2}
-                                    delay={1.2}
+                                    duration={2.2}
+                                    delay={1.8}
                                     animation="blurInUp"
                                     className="text-3xl md:text-5xl lg:text-6xl text-foreground drop-shadow-[0_0_10px_rgba(155,77,255,0.35)] text-balance leading-normal"
                                 >
-                                    tumne kadam
+                                    all I dream of is your eyes
                                 </TextAnimate>
                             </div>
                         ) : (
@@ -85,9 +82,10 @@ export default function LyricsScreen({ onComplete }) {
                                 {lyrics[currentLyricIndex].text}
                             </TextAnimate>
                         )}
+
                     </motion.div>
                 )}
             </AnimatePresence>
         </div>
     )
-}
+            }
