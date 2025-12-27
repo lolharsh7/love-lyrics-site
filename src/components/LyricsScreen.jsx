@@ -17,7 +17,7 @@ const lyrics = [
     { text: "Jis pe rakhe tum ne qadam", duration: 3800, anim: 1.5 },
     { text: "Ab se mera bhi raasta hai", duration: 3200, anim: 1.5 },
     { text: "Jaise mera tum se koi", duration: 3500, anim: 1.5 },
-    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 1.5 },
+    { text: "Pichhle janam ka vaasta hai", duration: 4000, anim: 2.0 },
 
     // Adhoore Section (Timing Fixed)
     { text: "Adhoore adhoore", duration: 3200, anim: 1.2 }, 
